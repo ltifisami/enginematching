@@ -1,0 +1,6 @@
+/home/sami/Projects/enginematching/enginematching/bin/Debug/enginematching.exe
+/home/sami/Projects/enginematching/enginematching/bin/Debug/enginematching.pdb
+/home/sami/Projects/enginematching/enginematching/obj/x86/Debug/enginematching.csprojAssemblyReference.cache
+/home/sami/Projects/enginematching/enginematching/obj/x86/Debug/enginematching.csproj.CoreCompileInputs.cache
+/home/sami/Projects/enginematching/enginematching/obj/x86/Debug/enginematching.exe
+/home/sami/Projects/enginematching/enginematching/obj/x86/Debug/enginematching.pdb

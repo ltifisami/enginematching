@@ -1,0 +1,27 @@
+﻿<Properties StartupConfiguration="{DFCB7C45-CED5-4443-B4F1-90F8E8C5AC83}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="enginematching/Program.cs">
+    <Files>
+      <File FileName="enginematching/Program.cs" Line="337" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ClassPad">
+        <State name="__root__">
+          <Node name="enginematching" expanded="True">
+            <Node name="enginematching" expanded="True" selected="True">
+              <Node name="References" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.enginematching PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches>
+    <Watch file="../../../enginematching/Program.cs" line="167" offsetX="837" offsetY="3154" expression="Price_delta_range" liveUpdate="False" />
+  </MonoDevelop.Ide.DebuggingService.PinnedWatches>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
