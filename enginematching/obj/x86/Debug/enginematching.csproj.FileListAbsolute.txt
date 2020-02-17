@@ -4,3 +4,7 @@
 /home/sami/Projects/enginematching/enginematching/obj/x86/Debug/enginematching.csproj.CoreCompileInputs.cache
 /home/sami/Projects/enginematching/enginematching/obj/x86/Debug/enginematching.exe
 /home/sami/Projects/enginematching/enginematching/obj/x86/Debug/enginematching.pdb
+/home/sami/Projects/enginematching/enginematching/bin/Debug/Microsoft.Office.Interop.Excel.dll
+/home/sami/Projects/enginematching/enginematching/bin/Debug/Newtonsoft.Json.dll
+/home/sami/Projects/enginematching/enginematching/bin/Debug/Newtonsoft.Json.xml
+/home/sami/Projects/enginematching/enginematching/obj/x86/Debug/enginematching.csproj.CopyComplete

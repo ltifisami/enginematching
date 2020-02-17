@@ -1,13 +1,29 @@
 ﻿<Properties StartupConfiguration="{DFCB7C45-CED5-4443-B4F1-90F8E8C5AC83}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="enginematching/Program.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="tauxchange/Program.cs">
     <Files>
-      <File FileName="enginematching/Program.cs" Line="337" Column="1" />
+      <File FileName="tauxchange/CurrencyRates.cs" Line="8" Column="21" />
+      <File FileName="tauxchange/ExelOperation.cs" Line="24" Column="34" />
+      <File FileName="tauxchange/Program.cs" Line="11" Column="15" />
     </Files>
     <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="enginematching" expanded="True">
+            <Node name="enginematching" expanded="True" />
+            <Node name="tauxchange" expanded="True">
+              <Node name="Properties" expanded="True" />
+              <Node name="Program.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
       <Pad Id="ClassPad">
         <State name="__root__">
           <Node name="enginematching" expanded="True">
-            <Node name="enginematching" expanded="True" selected="True">
+            <Node name="enginematching" expanded="True">
+              <Node name="References" expanded="True" />
+            </Node>
+            <Node name="tauxchange" expanded="True" selected="True">
               <Node name="References" expanded="True" />
             </Node>
           </Node>
@@ -21,7 +37,10 @@
   </MonoDevelop.Ide.DebuggingService.PinnedWatches>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/home/sami/Projects/enginematching/enginematching/ExelOperation.cs" relfile="enginematching/ExelOperation.cs" line="6" column="25" />
+      <Breakpoint file="/home/sami/Projects/enginematching/enginematching/CurrencyRates.cs" relfile="enginematching/CurrencyRates.cs" line="49" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations />
 </Properties>
