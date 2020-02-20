@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Excel = Microsoft.Office.Interop.Excel;
-namespace tauxchange
+
+namespace enginematching
 {
     public class ExcelOperation
     {
@@ -21,7 +21,7 @@ namespace tauxchange
             MySheet.Name = "Liste des devises";
             lastRow = MySheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell).Row;
         }
-        public void wirteToExcel(CurrencyRates cur, string name)
+       /* public void wirteToExcel(CurrencyRates cur, string name)
         {
             lastRow += 1;
             MySheet.Cells[lastRow, 1] = cur.Base;
@@ -35,7 +35,7 @@ namespace tauxchange
                 lastRow += 1;
             }
             MyBook.SaveAs(name);
-        }
+        }*/
     }
 
 

@@ -4,12 +4,12 @@ using System.Globalization;
 
 namespace enginematching
 {
-    public class Countryliste
+    public class CountryList
     {
-        public Countryliste()
+        public CountryList()
         {
         }
-        public static List<string> Country_Liste() 
+        public static List<string> get_Country_List() 
         {
             // Create liste
             List<string> CultureListe = new List<string>();

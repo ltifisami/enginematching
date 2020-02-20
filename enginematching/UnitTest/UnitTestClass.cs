@@ -1,17 +1,25 @@
-﻿using System;
+﻿using NUnit.Framework;
+using System;
 namespace enginematching
 {
-
-
-    public class Program
+    [TestFixture()]
+    public class UnitTestClass
     {
-        public static void Main(string[] args)
+
+
+        [Test()]
+        public void TestCase()
         {
 
+
+        }
+        [Test()]
+        public void TestGetProductByTicker(string Ticker)
+        {
             Product p1 = new Product();
             Product p2 = new Product();
             Product p3 = new Product();
-           
+
             p1.Ticker = "ABFDHSBR";
             p1.Quantity = Quantity.TONS;
             p1.Designation = "olivier";
@@ -25,11 +33,8 @@ namespace enginematching
             Product.Products.Add(p1);
             Product.Products.Add(p2);
             Product.Products.Add(p2);
-           
-            System.Console.WriteLine(p1.Ticker);
-            System.Console.WriteLine(p2.Ticker);
-            System.Console.WriteLine(p3.Ticker);
+            Assert.AreEqual(p1, Product.GetProductByTicker("ABFDHSBR"));
         }
-    }
 
+    }
 }

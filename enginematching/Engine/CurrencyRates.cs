@@ -5,7 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-namespace tauxchange
+namespace enginematching
 {
     public class CurrencyRates
     {
@@ -46,22 +46,13 @@ namespace tauxchange
             public CurrencyRates getCurrencyRates()
             {            // pour les derniers taux
                 var url = "https://openexchangerates.org/api/latest.json?app_id=id=598f07044ff143f19feebcdf138206cc";
-                Console.WriteLine("url est ...... "+url);
+
                 var currencyRates = _download_serialized_json_data<CurrencyRates>(url);
 
                 return currencyRates;
                
             }
-            public static void Main(string[] args)
-            {
-                Console.WriteLine("Hello World!");
-                //ExcelOperation excel = new ExcelOperation();
-                OpenExchange openExchange = new OpenExchange();
-                var currencyRates = openExchange.getCurrencyRates();
-                //excel.wirteToExcel(currencyRates, "Devises");
 
-                Console.WriteLine(currencyRates.ToString());
-            }
 
 
         }

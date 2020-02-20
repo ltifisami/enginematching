@@ -1,32 +1,30 @@
 ﻿<Properties StartupConfiguration="{DFCB7C45-CED5-4443-B4F1-90F8E8C5AC83}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="tauxchange/Program.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="enginematching/Markets/Market.cs">
     <Files>
-      <File FileName="tauxchange/CurrencyRates.cs" Line="8" Column="21" />
-      <File FileName="tauxchange/ExelOperation.cs" Line="24" Column="34" />
-      <File FileName="tauxchange/Program.cs" Line="11" Column="15" />
+      <File FileName="enginematching/Program.cs" Line="27" Column="20" />
+      <File FileName="enginematching/Products/Product.cs" Line="33" Column="9" />
+      <File FileName="enginematching/UnitTest/UnitTestClass.cs" Line="19" Column="7" />
+      <File FileName="enginematching/Markets/Market.cs" Line="78" Column="27" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="enginematching" expanded="True">
-            <Node name="enginematching" expanded="True" />
-            <Node name="tauxchange" expanded="True">
+            <Node name="enginematching" expanded="True">
+              <Node name="Engine" expanded="True" />
+              <Node name="Markets" expanded="True" />
+              <Node name="Products" expanded="True" />
               <Node name="Properties" expanded="True" />
-              <Node name="Program.cs" selected="True" />
+              <Node name="UnitTest" expanded="True">
+                <Node name="UnitTestClass.cs" selected="True" />
+              </Node>
             </Node>
           </Node>
         </State>
       </Pad>
       <Pad Id="ClassPad">
         <State name="__root__">
-          <Node name="enginematching" expanded="True">
-            <Node name="enginematching" expanded="True">
-              <Node name="References" expanded="True" />
-            </Node>
-            <Node name="tauxchange" expanded="True" selected="True">
-              <Node name="References" expanded="True" />
-            </Node>
-          </Node>
+          <Node name="enginematching" expanded="True" selected="True" />
         </State>
       </Pad>
     </Pads>
@@ -40,6 +38,7 @@
     <BreakpointStore>
       <Breakpoint file="/home/sami/Projects/enginematching/enginematching/ExelOperation.cs" relfile="enginematching/ExelOperation.cs" line="6" column="25" />
       <Breakpoint file="/home/sami/Projects/enginematching/enginematching/CurrencyRates.cs" relfile="enginematching/CurrencyRates.cs" line="49" column="1" />
+      <Breakpoint file="/home/sami/Projects/enginematching/enginematching/Countryliste.cs" relfile="enginematching/Countryliste.cs" line="8" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations />
