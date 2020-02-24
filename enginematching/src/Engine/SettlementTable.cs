@@ -1,4 +1,4 @@
-﻿namespace enginematching
+﻿namespace Engine
 {
     public class SettlementTable
     {

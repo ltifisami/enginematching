@@ -1,10 +1,9 @@
 ﻿
 using System;
+using System.Collections.Generic;
 
-
-namespace enginematching
+namespace Engine
 {
-
     //enumerator list for the type of order
     public enum Order_type { IOC, GFD, INV, ICB, DRT, BPR };
     // enumerator list for the type of trade
@@ -15,9 +14,11 @@ namespace enginematching
     public enum Quantity { TONS, UNIT };
 
 
+
     // class Order 
     public class Order
     {
+        private static List<Order> Orders = new List<Order>();
         private string ticker;
         private Operation_type operationType;
         private Order_type orderTrade;
@@ -55,7 +56,7 @@ namespace enginematching
             ValidityAbsoluteTime = validityAbsoluteTime;
         }
 
-
+      
 
         // Verify the  validity time Period of an Order 
         public bool IsValidateTimePeriode()
@@ -82,6 +83,47 @@ namespace enginematching
 
         }
 
+        // check the validity of an Order
+        public bool IsValideOrder()
+        {
+            return true;
+        }
+
+
+        // return an Order by Ticker
+        public static Order GetOrderByTicker(string Ticker)
+        {
+            return Orders.Find(delegate (Order o) { return o.ticker == Ticker; });
+        }
+
+
+
+        /* add order 
+        static order_table objectSetter(order_table _orderTable, string[] stdInputArgumentsArray)
+        {
+            try
+            {
+
+                if (Convert.ToInt32(stdInputArgumentsArray[2]) <= 0 || Convert.ToInt32(stdInputArgumentsArray[3]) <= 0) return _orderTable;
+                _orderTable.order_price = Convert.ToInt32(stdInputArgumentsArray[2]); ;
+                _orderTable.order_quantity = Convert.ToInt32(stdInputArgumentsArray[3]);
+                if (getOrderType(stdInputArgumentsArray[1]).Equals(order_type.GFD))
+                {
+                    //GFD Operation
+                    _orderTable.order_trade = order_type.GFD;
+                }
+                else if (getOrderType(stdInputArgumentsArray[1]).Equals(order_type.IOC))
+                {
+                    //IOC operation
+                    _orderTable.order_trade = order_type.IOC;
+                }
+                else _orderTable.order_trade = order_type.INV;
+
+                return _orderTable;
+            }
+            catch { return _orderTable; }
+        }
+        */
 
     }
 

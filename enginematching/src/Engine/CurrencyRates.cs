@@ -5,7 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-namespace enginematching
+namespace Engine
 {
     public class CurrencyRates
     {

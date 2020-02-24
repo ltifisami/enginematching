@@ -41,28 +41,32 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Markets\MarketManager.cs" />
-    <Compile Include="Markets\Market.cs" />
-    <Compile Include="Products\Product.cs" />
-    <Compile Include="Engine\CountryList.cs" />
-    <Compile Include="Engine\BuyTable.cs" />
-    <Compile Include="Engine\Order.cs" />
-    <Compile Include="Engine\OrderBook.cs" />
-    <Compile Include="Engine\PriceDeltaRange.cs" />
-    <Compile Include="Engine\SellTable.cs" />
-    <Compile Include="Engine\SettlementTable.cs" />
-    <Compile Include="Engine\TradeTable.cs" />
-    <Compile Include="Engine\CurrencyRates.cs" />
     <Compile Include="UnitTest\UnitTestClass.cs" />
+    <Compile Include="src\Engine\BuyTable.cs" />
+    <Compile Include="src\Engine\CountryList.cs" />
+    <Compile Include="src\Engine\CurrencyRates.cs" />
+    <Compile Include="src\Engine\Order.cs" />
+    <Compile Include="src\Engine\OrderBook.cs" />
+    <Compile Include="src\Engine\PriceDeltaRange.cs" />
+    <Compile Include="src\Engine\SellTable.cs" />
+    <Compile Include="src\Engine\SettlementTable.cs" />
+    <Compile Include="src\Engine\TradeTable.cs" />
+    <Compile Include="src\Markets\Market.cs" />
+    <Compile Include="src\Markets\MarketManager.cs" />
+    <Compile Include="src\Products\Product.cs" />
+    <Compile Include="src\Markets\IMarketManager.cs" />
+    <Compile Include="src\Markets\MarketManagerFacade.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Products\" />
-    <Folder Include="Engine\" />
-    <Folder Include="Markets\" />
     <Folder Include="UnitTest\" />
+    <Folder Include="src\" />
+    <Folder Include="src\libraries\" />
+    <Folder Include="src\Engine\" />
+    <Folder Include="src\Markets\" />
+    <Folder Include="src\Products\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,9 +1,19 @@
 ﻿
 using System;
+using Engine;
+using Products;
 
-
-namespace enginematching
+namespace Markets
 {
+    //enumerator list for the type of order
+    public enum Order_type { IOC, GFD, INV, ICB, DRT, BPR };
+    // enumerator list for the type of trade
+    public enum Operation_type { BUY, SELL, CANCEL, PRINT, MODIFY };
+    //enumerator list for Currency
+    public enum Devise { EUR, GBD, YEN, CHF, USD, REM_reminbi };
+    // enumarator list for UNIT 
+    public enum Quantity { TONS, UNIT };
+
     // Class Market 
     public class Market
     {
@@ -26,7 +36,7 @@ namespace enginematching
         public Market()
         {
 
-            Ticker = ticker;
+
             FixingPeriod = fixingPeriod;
             MaxQuantity = maxQuantity;
             MarketInitDate = marketInitDate;
@@ -42,9 +52,9 @@ namespace enginematching
         }
 
         //Constructor with parameters useful for update
-        public Market(string ticker, int fixingPeriod, int maxQuantity, DateTime marketInitDate, int minQuantity, Quantity description, float priceDelta, PriceDeltaRange priceDeltaRanger, BuyTable buyTable, SellTable sellTable, SettlementTable settlementTable, TradeTable tradeTable)
+        public Market( int fixingPeriod, int maxQuantity, DateTime marketInitDate, int minQuantity, Quantity description, float priceDelta, PriceDeltaRange priceDeltaRanger, BuyTable buyTable, SellTable sellTable, SettlementTable settlementTable, TradeTable tradeTable)
         {
-            Ticker = ticker;
+           
             FixingPeriod = fixingPeriod;
             MaxQuantity = maxQuantity;
             MarketInitDate = marketInitDate;

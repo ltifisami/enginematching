@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using Engine;
 
-
-namespace enginematching
+namespace Products
 {
+
     //Class Product
     public class Product
     {
@@ -20,7 +21,6 @@ namespace enginematching
         // Constructor  
         public Product()
         {
-            Ticker = ticker;
             Quantity = quantity;
             Designation = designation;
         }

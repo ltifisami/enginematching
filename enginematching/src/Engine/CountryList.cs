@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace enginematching
+namespace Engine
 {
     public class CountryList
     {
         public CountryList()
         {
         }
-        public static List<string> get_Country_List() 
+        public static List<string> GetCountryList() 
         {
             // Create liste
             List<string> CultureListe = new List<string>();
