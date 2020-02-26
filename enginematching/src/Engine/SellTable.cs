@@ -3,38 +3,57 @@ using System.Collections.Generic;
 
 namespace Engine
 {
-    public class SellTable : IEnumerable<Order>
+    public class SellTable
     {
-        private  List<Order> selltable;
-        public  List<Order> Selltable { get => selltable; set => selltable = value; }
 
-        // Constructeur SellTable 
-        public SellTable(Order order)
+
+        private static List<Order> selltable = new List<Order>();
+        public static List<Order> Selltable { get => selltable; set => selltable = value; }
+
+
+
+
+        // Constructeur BuyTable 
+        public SellTable(Order _order)
         {
-            if (order.OperationType == Operation_type.SELL)
+
+            if (_order.OperationType == Operation_type.SELL)
             {
-                Selltable.Add(order);
-               
+                Selltable.Add(_order);
+
             }
         }
-       
 
-        //return an OrderSell by Ticker from SellTables
-        public   Order GetSellOrderByTicker(string Ticker)
+        public SellTable()
         {
-            return Selltable.Find(delegate (Order o) { return o.Ticker == Ticker; });
+
+            selltable = Selltable;
         }
 
-        //return an OrderSell by IdOrder from SellTables
-        public  Order GetSellOrderByIdOrder(int idOrder)
+        // return IdOrder of an Order from Buytable collection
+        public static int GetSellOrderId(Order _order)
+        {
+            if (Selltable.Contains(_order))
+            {
+                return Selltable.IndexOf(_order);
+            }
+            else
+            {
+                return -1;
+            }
+        }
+
+
+        //return an OrderBuy by IdOrder from BuyTable
+        public static Order GetSellOrderByOrderId(int idOrder)
         {
 
             return Selltable[idOrder];
+
         }
 
-        //Remove an Order Sell from SellTable
-
-        public void RemoveSellOrder(Order order)
+        // Remove an Order from BuyTable 
+        public void RemoveBuyOrder(Order order)
         {
             if (Selltable.Contains(order))
             {
@@ -42,26 +61,48 @@ namespace Engine
             }
 
         }
-
-        // Add an Order to SellTable 
-        public void AddSellOrder(Order order)
+        // Add an Order to BuyTable 
+        public void AddSellOrder(Order _order)
         {
 
-                Selltable.Add(order);
 
+            if (_order.OperationType == Operation_type.BUY && !Selltable.Contains(_order))
+            {
+                Selltable.Add(_order);
+
+            }
+        }
+
+        //Return SellTable by Ticker 
+        public static List<Order> GetSellTableByTicker(string _Ticker)
+        {
+            List<Order> Orderlist = new List<Order>();
+            foreach (var sellOrder in Selltable)
+            {
+                if (sellOrder.Ticker == _Ticker)
+                {
+                    Orderlist.Add(sellOrder);
+                }
+
+            }
+            return Orderlist;
 
         }
 
-        public IEnumerator<Order> GetEnumerator()
+        // Return List of SellTicker from Selltable
+
+        public static List<string> ListSellTicker()
         {
-            throw new System.NotImplementedException();
+            List<string> listTicker = new List<string>();
+            foreach (var order in Selltable)
+            {
+                if (!listTicker.Contains(order.Ticker))
+                    listTicker.Add(order.Ticker);
+            }
+            return listTicker;
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }
 
-}
+

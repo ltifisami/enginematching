@@ -4,67 +4,106 @@ using System.Linq;
 
 namespace Engine
 {
-    public class BuyTable : IEnumerable<Order>
+    public class BuyTable
     {
 
+       
+        private static List<Order> buytable = new List<Order>();
+        public static List<Order> Buytable { get => buytable; set => buytable = value; }
 
-        private  List<Order> buytable ;
-        public  List<Order> Buytable { get => buytable; set => buytable = value; }
-      
+
 
 
         // Constructeur BuyTable 
-        public BuyTable(Order order)
-        {   
-            Buytable = new List<Order>();
-            if (order.OperationType == Operation_type.BUY )
+        public BuyTable(Order _order)
+        {
+
+            if (_order.OperationType == Operation_type.BUY)
             {
-                Buytable.Add(order);
+                Buytable.Add(_order);
 
             }
         }
 
-
-        //return an OrderBuy by IdOrder from SellTable
-        public  Order GetBuyOrderByIdOrder(int idOrder)
+        public BuyTable()
         {
            
+            buytable = Buytable;
+        }
+
+        // return OrderId of an Order from Buytable 
+        public static int GetBuyOrderId(Order _order)
+        {
+            if (Buytable.Contains(_order))
+            {
+                return Buytable.IndexOf(_order);
+            }
+            else
+            {
+                return -1;
+            }
+        }
+
+
+        //return an OrderBuy by IdOrder 
+        public Order GetBuyOrderByOrderId(int idOrder)
+        {
+
             return Buytable[idOrder];
+
         }
 
         // Remove an Order from BuyTable 
         public void RemoveBuyOrder(Order order)
         {
-            if(Buytable.Contains(order))
+            if (Buytable.Contains(order))
             {
                 Buytable.Remove(order);
             }
 
         }
-        // Add an Order to BuyTable 
-        public void AddBuyOrder(Order order)
+        // Add an OrderBuy to BuyTable 
+        public  void AddBuyOrder(Order _order)
         {
 
-                Buytable.Add(order);
 
+            if (_order.OperationType == Operation_type.BUY && !Buytable.Contains(_order) )
+            {
+                Buytable.Add(_order);
+
+            }
+        }
+
+        //Return a BuyTable by Ticker 
+        public static List<Order> GetBuyTableByTicker(string _Ticker)
+        {
+            List<Order> Orderlist = new List<Order>();
+            foreach (var buyOrder in Buytable)
+            {
+                if (buyOrder.Ticker == _Ticker)
+                {
+                    Orderlist.Add(buyOrder);
+                }
+
+            }
+            return Orderlist;
 
         }
 
-        //return an Order Buy by Ticker from BuyTable
-        public  Order GetBuyOrderByTicker(string Ticker)
+
+        // Return List of BuyTicker from Buytable
+
+        public static List<string> ListBuyTicker()
         {
-            return Buytable.Find(delegate (Order o) { return o.Ticker == Ticker; });
+            List<string> listTicker = new List<string>();
+            foreach (var order in Buytable)
+            {
+                if (!listTicker.Contains(order.Ticker))
+                    listTicker.Add(order.Ticker);
+            }
+            return listTicker;
         }
 
-        public IEnumerator<Order> GetEnumerator()
-        {
-            throw new System.NotImplementedException();
-        }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            throw new System.NotImplementedException();
-        }
     }
-
 }

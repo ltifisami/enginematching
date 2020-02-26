@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿
 
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Engine
 {
@@ -8,6 +12,14 @@ namespace Engine
 
         // Generic Collection contains all the Order
         public IDictionary<string, Order> OrderBookCollection;
+        public static List<Order> Buytable = new List<Order>();
+        public static Dictionary<string, List<Order>> BuyTables = new Dictionary<string, List<Order>>();
+        public static List<Order> Selltable = new List<Order>();
+        public static Dictionary<string, List<Order>> SellTables = new Dictionary<string, List<Order>>();
+        public static Dictionary<int, int> printBuyOrderTable = new Dictionary<int, int>();
+        public static Dictionary<int, int> printSellOrderTable = new Dictionary<int, int>();
+
+
 
         //Constructor 
         public OrderBook(IDictionary<string, Order> OrderBookCollection)
@@ -30,13 +42,91 @@ namespace Engine
 
 
 
+         static void PrintOperation()
+        {
+
+            //PRINT Operation logic
+            //Printing Sell operations
+            GeneratePrintTable();
+
+            Console.WriteLine("SELL:");
+            foreach (var kvp1 in printSellOrderTable.Reverse())
+            {
+
+                //Console.WriteLine("Order ID = {0}", kvp1.Key);
+                Console.WriteLine(kvp1.Key + " " + kvp1.Value);
+            }
+            //Printing BUY operations
+            Console.WriteLine("BUY:");
+            foreach (var kvp1 in printBuyOrderTable.Reverse())
+            {
+                //Console.WriteLine("Order ID = {0}", kvp1.Key);
+                Console.WriteLine(kvp1.Key + " " + kvp1.Value);
+            }
+
+
+
+        }
+
+
+
+
+        static void GeneratePrintTable()
+        {
+            foreach (var kvp1 in Selltable)
+            {
+                try
+                {
+                    printSellOrderTable.Add(kvp1.OrderPrice, kvp1.OrderQuantity);
+                }
+                catch
+                {
+                    printSellOrderTable[kvp1.OrderPrice] += kvp1.OrderQuantity;
+                }
+            }
+
+            foreach (var kvp1 in Buytable)
+            {
+                try
+                {
+                    printBuyOrderTable.Add(kvp1.OrderPrice, kvp1.OrderQuantity);
+                }
+                catch
+                {
+                    printBuyOrderTable[kvp1.OrderPrice] += kvp1.OrderQuantity;
+                }
+            }
+
+        }
+
+
+
+
+
+
+
+
+
         public void CreateOrderBook()
         {
-            /*
+
+            BuyTable _BuyTable = new BuyTable();
+            SellTable _SellTable = new SellTable();
+
+
+
+
+
+            // Enter your code here. Read input using Console.ReadLine. Print output using Console.WriteLine. 
+            // Your class should be named Solution */
             string[] stdInputArgumentsArray = new string[] { };
 
+
+
             //Reading the standard input arguments and spilt them based on spaces
-            //Exmaple : BUY GFD 1000 10 order1
+
+            //Exmaple :  //Exmaple order1 : "ABCDEFGH1234" BUY GFD 1000 10 EUR Germany MM/dd/yyyy h:mm tt 02.00:00:00 0.00:00:1000  0order1
+
             //All the spilt argemtns are saved to an array named stdInputArgumentsArray
 
             //Console.Read();
@@ -44,24 +134,36 @@ namespace Engine
 
             string currentLine = " ";
 
+            while ((currentLine = Console.ReadLine()) != null && currentLine != "")
+            {
+                stdInput.Add(currentLine);
+
+            }
+
+
             foreach (var line in stdInput)
             {
                 stdInputArgumentsArray = line.Split(null);
 
+                Order _Order = new Order();
+                // Create an Order 
+                _Order = Order.CreateOrder(stdInputArgumentsArray);
+
+
+
 
                 //Checks if the Trade statement is right
-                if (isValidTrade(stdInputArgumentsArray[0], stdInputArgumentsArray))
+                if (TradeTable.IsValidTrade(_Order.OperationType, _Order))
                 {
-                    switch (stdInputArgumentsArray[0])
+                    switch (_Order.OperationType)
                     {
-                        case BUY_LABEL:
+                        case Operation_type.BUY:
                             {
                                 //BUY Operation logic
                                 try
                                 {
-                                    order_table _orderTable = new order_table();
-                                    _orderTable = objectSetter(_orderTable, stdInputArgumentsArray);
-                                    buyTable.Add((stdInputArgumentsArray[4]), _orderTable);
+
+                                    TradeTable.AddBuyOrderInBuyTables(Buytable, _Order);
                                 }
                                 catch
                                 {
@@ -69,14 +171,12 @@ namespace Engine
                                 }
                                 break;
                             }
-                        case SELL_LABEL:
+                        case Operation_type.SELL:
                             {
                                 //SELL Operation logic
                                 try
                                 {
-                                    order_table _orderTable = new order_table();
-                                    _orderTable = objectSetter(_orderTable, stdInputArgumentsArray);
-                                    sellTable.Add((stdInputArgumentsArray[4]), _orderTable);
+                                    TradeTable.AddSellOrderInSellTables(Selltable, _Order);
                                 }
                                 catch
                                 {
@@ -84,62 +184,68 @@ namespace Engine
                                 }
                                 break;
                             }
-                        case CANCEL_LABEL:
+                            /*
+                        case Operation_type.CANCEL:
                             {
                                 //CANCEL Operation logic
                                 //Removing Sell and BUY tabel entry
-                                if (sellTable.ContainsKey(stdInputArgumentsArray[1]))
+                                if (Selltable.Contains(_Order))
                                 {
-                                    sellTable.Remove(stdInputArgumentsArray[1]);
+                                    Selltable.Remove(_Order);
 
                                 }
-                                else if (buyTable.ContainsKey(stdInputArgumentsArray[1]))
+                                else if (Buytable.Contains(_Order))
                                 {
-                                    buyTable.Remove(stdInputArgumentsArray[1]);
+                                    Buytable.Remove(_Order);
                                 }
 
                                 break;
                             }
-                        case MODIFY_LABEL:
-                            {
+                            */
+                            /*
+                       
+                     case Operation_type.MODIFY:
+                         {
 
-                                //MODIFY Operation logic
-                                if (stdInputArgumentsArray[2].Equals(SELL_LABEL))
-                                {
-                                    if (sellTable.ContainsKey(stdInputArgumentsArray[1]))
-                                    {
-                                        var temp = sellTable[stdInputArgumentsArray[1]];
-                                        if (temp.order_trade.Equals(order_type.IOC) || temp.order_trade.Equals(order_type.INV)) break;
-                                        order_table _orderTable = new order_table();
-                                        _orderTable.order_price = Convert.ToInt32(stdInputArgumentsArray[3]);
-                                        _orderTable.order_quantity = Convert.ToInt32(stdInputArgumentsArray[4]);
-                                        _orderTable.order_trade = temp.order_trade;
+                             //MODIFY Operation logic
+                             if (stdInputArgumentsArray[2] )
+                             {
+                                 if (sellTable.ContainsKey(stdInputArgumentsArray[1]))
+                                 {
+                                     var temp = sellTable[stdInputArgumentsArray[1]];
+                                     if (temp.order_trade.Equals(order_type.IOC) || temp.order_trade.Equals(order_type.INV)) break;
+                                     order_table _orderTable = new order_table();
+                                     _orderTable.order_price = Convert.ToInt32(stdInputArgumentsArray[3]);
+                                     _orderTable.order_quantity = Convert.ToInt32(stdInputArgumentsArray[4]);
+                                     _orderTable.order_trade = temp.order_trade;
 
-                                        sellTable.Remove(stdInputArgumentsArray[1]);
-                                        sellTable.Add(stdInputArgumentsArray[1], _orderTable);
+                                     sellTable.Remove(stdInputArgumentsArray[1]);
+                                     sellTable.Add(stdInputArgumentsArray[1], _orderTable);
 
-                                    }
-                                }
-                                if (stdInputArgumentsArray[2].Equals(BUY_LABEL))
-                                {
-                                    if (buyTable.ContainsKey(stdInputArgumentsArray[1]))
-                                    {
-                                        var temp = buyTable[stdInputArgumentsArray[1]];
-                                        if (temp.order_trade.Equals(order_type.IOC) || temp.order_trade.Equals(order_type.INV)) break;
-                                        order_table _orderTable = new order_table();
-                                        _orderTable.order_price = Convert.ToInt32(stdInputArgumentsArray[3]);
-                                        _orderTable.order_quantity = Convert.ToInt32(stdInputArgumentsArray[4]);
-                                        _orderTable.order_trade = temp.order_trade;
+                                 }
+                             }
+                             if (stdInputArgumentsArray[2].Equals(BUY_LABEL))
+                             {
+                                 if (buyTable.ContainsKey(stdInputArgumentsArray[1]))
+                                 {
+                                     var temp = buyTable[stdInputArgumentsArray[1]];
+                                     if (temp.order_trade.Equals(order_type.IOC) || temp.order_trade.Equals(order_type.INV)) break;
+                                     order_table _orderTable = new order_table();
+                                     _orderTable.order_price = Convert.ToInt32(stdInputArgumentsArray[3]);
+                                     _orderTable.order_quantity = Convert.ToInt32(stdInputArgumentsArray[4]);
+                                     _orderTable.order_trade = temp.order_trade;
 
-                                        buyTable.Remove(stdInputArgumentsArray[1]);
+                                     buyTable.Remove(stdInputArgumentsArray[1]);
 
-                                        buyTable.Add(stdInputArgumentsArray[1], _orderTable);
+                                     buyTable.Add(stdInputArgumentsArray[1], _orderTable);
 
-                                        //buyTable.Add(stdInputArgumentsArray[1], _orderTable);
-                                    }
-                                }
-                                break;
-                            }
+                                     //buyTable.Add(stdInputArgumentsArray[1], _orderTable);
+                                 }
+                             }
+                             break;
+
+                         }
+                         */
 
                         default:
                             break;
@@ -148,98 +254,85 @@ namespace Engine
 
             }
 
-
             try
             {
                 //Let's Trade
-                if (stdInputArgumentsArray[0].Equals(PRINT_LABEL) && isTrade())
+                if (stdInputArgumentsArray[0] == "PRINT" && TradeTable.IsTrade())
                 {
                     //Console.Write("Here");
                     //tempSellTable = sellTable;
                     // try
                     {
-                        var totalNumberOfSellOrders = sellTable.Count;
+                        var totalNumberOfSellOrders = Selltable.Count;
                         //llTable.
                         int indexSellTable = 0;
                         // var tempSellTable = sellTable;
                         while (indexSellTable < totalNumberOfSellOrders)
                         {
-                            foreach (var kvp1 in sellTable.ToArray())
+                            foreach (var kvp1 in Selltable)
                             {
 
-                                // var currentSellOrderTrade = kvp1.Value.order_trade;
-                                // Console.WriteLine("Let's Trade");
 
-                                sellTrade(kvp1.Key.ToString());
+                                TradeTable.SellTrade(SellTable.GetSellOrderId(kvp1), kvp1.Ticker);
 
-
-
-
-                                //var flattenList = buyTable.SelectMany(x => x.Value.order_price);
-                                //getAllBuysGreaterThanMine();
                             }
                             indexSellTable++;
                         }
-                        foreach (var kvp1 in sellTable.ToArray())
+                        foreach (var kvp1 in Selltable)
                         {
-                            if (kvp1.Value.order_trade.Equals(order_type.IOC))
+                            if (kvp1.OrderTrade == Order_type.IOC)
                             {
-                                sellTable.Remove(kvp1.Key);
+                                Selltable.Remove(kvp1);
                             }
                         }
 
-                        foreach (var kvp1 in buyTable.ToArray())
+                        foreach (var kvp1 in Buytable)
                         {
-                            if (kvp1.Value.order_trade.Equals(order_type.IOC))
+                            if (kvp1.OrderTrade == Order_type.IOC)
                             {
-                                buyTable.Remove(kvp1.Key);
+                                Buytable.Remove(kvp1);
                             }
                         }
                     }
                     // catch { }
-                    printOperation();
+                     PrintOperation();
                 }
 
                 //check for SELL AND BUY Tables for suitable trades.
-                else if (!isTrade() && stdInputArgumentsArray[0].Equals(PRINT_LABEL))
+                else if (!TradeTable.IsTrade() && stdInputArgumentsArray[0] == "PRINT")
                 {
-                    printOperation();
+                     PrintOperation();
                 }
-                else if (isTrade())
+                else if (TradeTable.IsTrade())
                 {
-                    var totalNumberOfSellOrders = sellTable.Count;
+                    var totalNumberOfSellOrders = Selltable.Count;
                     //llTable.
                     int indexSellTable = 0;
                     // var tempSellTable = sellTable;
                     while (indexSellTable < totalNumberOfSellOrders)
                     {
-                        foreach (var kvp1 in sellTable.ToArray())
+                        foreach (var kvp1 in Selltable)
                         {
+                            TradeTable.SellTrade(SellTable.GetSellOrderId(kvp1), kvp1.Ticker);
 
-                            // var currentSellOrderTrade = kvp1.Value.order_trade;
-                            // Console.WriteLine("Let's Trade");
-
-                            sellTrade(kvp1.Key.ToString());
-                            //var flattenList = buyTable.SelectMany(x => x.Value.order_price);
-                            //getAllBuysGreaterThanMine();
                         }
                         indexSellTable++;
 
                     }
 
-                    foreach (var kvp1 in sellTable.ToArray())
+                    foreach (var kvp1 in Selltable)
                     {
-                        if (kvp1.Value.order_trade.Equals(order_type.IOC))
+                        if (kvp1.OrderTrade == Order_type.IOC)
                         {
-                            sellTable.Remove(kvp1.Key);
+                            Selltable.Remove(kvp1);
                         }
                     }
 
-                    foreach (var kvp1 in buyTable.ToArray())
+                    foreach (var kvp1 in Buytable)
                     {
-                        if (kvp1.Value.order_trade.Equals(order_type.IOC))
+                        if (kvp1.OrderTrade == Order_type.IOC)
                         {
-                            buyTable.Remove(kvp1.Key);
+                            Buytable.Remove(kvp1);
                         }
                     }
 
@@ -253,48 +346,23 @@ namespace Engine
             Console.ReadKey();
         }
 
-        //
-        static void generatePrintTable()
-        {
-            foreach (var kvp1 in sellTable)
-            {
-                try
-                {
-                    printSellOrderTable.Add(kvp1.Value.order_price, kvp1.Value.order_quantity);
-                }
-                catch
-                {
-                    printSellOrderTable[kvp1.Value.order_price] += kvp1.Value.order_quantity;
-                }
-            }
-
-            foreach (var kvp1 in buyTable)
-            {
-                try
-                {
-                    printBuyOrderTable.Add(kvp1.Value.order_price, kvp1.Value.order_quantity);
-                }
-                catch
-                {
-                    printBuyOrderTable[kvp1.Value.order_price] += kvp1.Value.order_quantity;
-                }
-            }
-            */
-
-        }
-
-
-
-
-
-
-
-
-
-
     }
-
 }
+
+
+    
+
+
+    
+
+
+
+   
+
+
+
+
+
 
 
 

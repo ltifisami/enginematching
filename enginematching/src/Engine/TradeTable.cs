@@ -9,8 +9,8 @@ namespace Engine
     // Class TradeTable contains the Order matched
     public class TradeTable
     {
-        public static Dictionary<string, BuyTable> BuyTables = new Dictionary<string, BuyTable>()  ;
-        public static Dictionary<string, SellTable> SellTables = new Dictionary<string, SellTable>()  ;
+        public static Dictionary<string, List<Order>> BuyTables = new Dictionary<string, List<Order>>();
+        public static Dictionary<string, List<Order>> SellTables = new Dictionary<string, List<Order>>();
 
 
         private Order orderTradeBuy;
@@ -74,30 +74,57 @@ namespace Engine
         }
 
 
-
-        // return a BuyTable by Ticker
-        public static BuyTable GetBuyTableByTicker(string Ticker)
+        // Create BuyTables : BuyTable by Ticker
+        public static Dictionary<string, List<Order>> CreateBuyTables()
         {
-
-            return BuyTables[Ticker];
+            foreach (var Ticker in BuyTable.ListBuyTicker())
+            {
+                BuyTables.Add(Ticker, BuyTable.GetBuyTableByTicker(Ticker));
+            }
+            return BuyTables;
         }
 
 
-
-        // return a SellTable by Ticker
-        public static SellTable GetSellTableByTicker(string Ticker)
+        // Create SellTables : SellTable by Ticker
+        public static Dictionary<string, List<Order>> CreateSellTables()
         {
-
-            return SellTables[Ticker];
+            foreach (var Ticker in SellTable.ListSellTicker())
+            {
+                SellTables.Add(Ticker, SellTable.GetSellTableByTicker(Ticker));
+            }
+            return SellTables;
         }
 
 
+        public static void AddBuyOrderInBuyTables(List<Order> buyTable ,Order _order)
+        {
+            if (!BuyTables.ContainsKey(_order.Ticker))
+            {
+                buyTable.Add(_order);
+                BuyTables.Add(_order.Ticker, buyTable);
+            }else
+            {
+                buyTable.Add(_order);
+            }
+        }
 
+        public static void AddSellOrderInSellTables(List<Order> sellTable, Order _order)
+        {
+            if (!SellTables.ContainsKey(_order.Ticker))
+            {
+                sellTable.Add(_order);
+                SellTables.Add(_order.Ticker, sellTable);
+            }
+            else
+            {
+                sellTable.Add(_order);
+            }
+        }
 
 
 
         // chek the validity of the Trade
-        static bool IsTrade()
+        public static bool IsTrade()
         {
             if (BuyTables.Equals(0) || SellTables.Equals(0)) return false;
 
@@ -108,22 +135,22 @@ namespace Engine
             return false;
         }
 
-         // check the validity of the trade
-        static bool IsValidTrade(string operation, Order order)
+        // check the validity of the trade
+        public static bool IsValidTrade(Operation_type operation_Type, Order order)
         {
-            if (operation.Equals(Operation_type.BUY.ToString())
-                || operation.Equals(Operation_type.SELL.ToString())
-                || operation.Equals(Operation_type.MODIFY.ToString()))
+            if (operation_Type == Operation_type.BUY
+                || operation_Type == Operation_type.SELL
+                || operation_Type == Operation_type.MODIFY)
             {
                 //return true if arguments Order is valide
                 if (order.IsValideOrder()) return true;
             }
-            else if (operation.Equals(Operation_type.CANCEL.ToString()))
+            else if (operation_Type == Operation_type.CANCEL)
             {
                 //return true if arguments Order CANCEL is valide
                 if (order.IsValideOrder()) return true;
             }
-            else if (operation.Equals(Operation_type.PRINT.ToString()))
+            else if (operation_Type == Operation_type.PRINT)
             {
                 //return true if arguments Order PRINT is valide
                 if (order.IsValideOrder()) return true;
@@ -146,12 +173,12 @@ namespace Engine
 
         // SellTrade
 
-        static void SellTrade(int idOrderSell,string Ticker)
+        public static void SellTrade(int idOrderSell, string Ticker)
         {
 
 
             // Get BuyTable by Ticker
-            var buyTable = GetBuyTableByTicker(Ticker);
+            var buyTable = BuyTable.GetBuyTableByTicker(Ticker);
             // Sort buytable by OrderPrice
             var sortedBuyTable = buyTable.OrderByDescending(n => n.OrderPrice).ToList();
 
@@ -160,102 +187,98 @@ namespace Engine
             foreach (var buyOrder in sortedBuyTable)
             {
                 // Get an Order from SellTables
-                var sellOrder = SellTables[Ticker].GetSellOrderByIdOrder(idOrderSell);
-
+                var sellOrder = SellTables[Ticker][idOrderSell];
                 if (sellOrder == null)
                 { continue; }
                 var sellOrderPrice = sellOrder.OrderPrice;
                 var sellOrderQunt = sellOrder.OrderQuantity;
                 var sellOrderType = sellOrder.OrderTrade;
 
-                    if (sellOrderPrice > buyOrder.OrderPrice && index.Equals(0)) return;
+                if (sellOrderPrice > buyOrder.OrderPrice && index.Equals(0)) return;
 
-                    var num_traded = ReturnLeastNumber(sellOrderQunt, buyOrder.OrderQuantity);
+                var num_traded = ReturnLeastNumber(sellOrderQunt, buyOrder.OrderQuantity);
 
                 //Update OrderQuantity
-                buyOrder.OrderQuantity = num_traded;
-                sellOrder.OrderQuantity = num_traded;
-                int idOrderBuy =buyOrder.GetHashCode();
-                ModifyTable(sellOrder, idOrderSell);
-                ModifyTable(buyOrder, idOrderBuy);
 
-                   if (sellOrderType.Equals(Order_type.IOC))
-                    {
-                        SellTables[Ticker].RemoveSellOrder(sellOrder);
-                        
-                        // break;
-                    }
-                    if (buyOrder.OrderTrade.Equals(Order_type.IOC))
-                    {
-                        BuyTables[Ticker].RemoveBuyOrder(buyOrder);
-                        // break;
-                    }
+                ModifyOrder(sellOrder, num_traded);
+                ModifyOrder(buyOrder, num_traded);
 
-                    index++;
+                if (sellOrderType.Equals(Order_type.IOC))
+                {
+                    SellTables[Ticker].Remove(sellOrder);
+
+                    // break;
+                }
+                if (buyOrder.OrderTrade.Equals(Order_type.IOC))
+                {
+                    BuyTables[Ticker].Remove(buyOrder);
+                    // break;
+                }
+
+                index++;
 
             }
-            }
+        }
+
+
+
+
+
 
 
 
 
         // Modify Table
-        static void ModifyTable(Order order, int idOrder)
+        public static void ModifyOrder(Order order, int numTraded)
         {
 
-            if (order.OperationType.Equals(Operation_type.SELL))
+            if (order.OperationType == Operation_type.SELL)
             {
-
-                if (SellTables[order.Ticker].Selltable.Contains(order))
+                //(currentSellOrderID, operation_type.SELL, currentSellOrderPrice, num_traded, currentSellOrderType);
+                if (SellTable.Selltable.Contains(order))
                 {
 
 
-                    var temp = SellTables[order.Ticker].GetSellOrderByIdOrder(idOrder);
-
-                    temp.OrderPrice = order.OrderPrice;
-                    temp.OrderQuantity -= order.OrderQuantity;
+                    var temp = order.OrderQuantity - numTraded;
+                   
 
 
-                    if (temp.OrderQuantity <= 0)
+
+                    if (temp <= 0)
                     {
-                        temp.OrderQuantity = 0;
-                        SellTables[order.Ticker].RemoveSellOrder(temp);
+                        SellTable.Selltable.Remove(order);
                     }
                     else
                     {
-                        
-                        SellTables[order.Ticker].RemoveSellOrder(order);
-                        SellTables[order.Ticker].AddSellOrder(temp);
+
+                        order.OrderQuantity = order.OrderQuantity - numTraded;
                     }
+
+
                 }
-
-
-            }
-            if (BuyTables[order.Ticker].Buytable.Contains(order))
-            {
-
-
-                var temp = BuyTables[order.Ticker].GetBuyOrderByIdOrder(idOrder);
-
-                temp.OrderPrice = order.OrderPrice;
-                temp.OrderQuantity -= order.OrderQuantity;
-
-
-                if (temp.OrderQuantity <= 0)
-                {
-                    temp.OrderQuantity = 0;
-                    BuyTables[order.Ticker].RemoveBuyOrder(temp);
-                }
-                else
+                if (BuyTable.Buytable.Contains(order))
                 {
 
-                    BuyTables[order.Ticker].RemoveBuyOrder(order);
-                    BuyTables[order.Ticker].AddBuyOrder(temp);
+                    var temp = order.OrderQuantity - numTraded;
+                    if (temp<= 0)
+                    {
+                        BuyTable.Buytable.Remove(order);
+                    }
+                    else
+                    {
+
+                        order.OrderQuantity = order.OrderQuantity - numTraded;
+                    }
+
+
+
                 }
+
             }
-           
+
+
+
         }
 
     }
-
 }
