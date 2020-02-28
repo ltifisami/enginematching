@@ -46,7 +46,7 @@ namespace Engine
 
 
         //return an OrderBuy by IdOrder 
-        public Order GetBuyOrderByOrderId(int idOrder)
+        public static Order GetBuyOrderByOrderId(int idOrder)
         {
 
             return Buytable[idOrder];

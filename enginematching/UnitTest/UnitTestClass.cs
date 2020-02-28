@@ -207,7 +207,7 @@ namespace Engine
         //Test :Return an OrderBuy by IdOrder from BuyTable
         public void TestGetBuyOrderByOrderId()
         {
-            Assert.AreEqual(order1, buytable.GetBuyOrderByOrderId(0));
+            Assert.AreEqual(order1, BuyTable.GetBuyOrderByOrderId(0));
         }
 
 
@@ -224,76 +224,6 @@ namespace Engine
         {
             Assert.IsTrue(TradeTable.CreateBuyTables().ContainsKey("ABCD4568DF02"));
         }
-
-
-        [Test()]
-        public void TestCreateOrder()
-        {
-            string[] stdInputArgumentsArray = new string[10];
-            //Exmaple order1 : ABCDEFGH1234" BUY GFD 1000 10 EUR Germany MM/dd/yyyy h:mm tt 02.00:00:00 0.00:00:1000  0order1
-            stdInputArgumentsArray[0] = "ABCDEFCVFGJU";
-            stdInputArgumentsArray[1] = "BUY";
-            stdInputArgumentsArray[2] = "GFD";
-            stdInputArgumentsArray[3] = "1000";
-            stdInputArgumentsArray[4] = "10";
-            stdInputArgumentsArray[5] = "EUR";
-            stdInputArgumentsArray[6] = "Germany";
-            stdInputArgumentsArray[7] = " 01-01-2020 10:04:01";
-            stdInputArgumentsArray[8]= "01:2";
-            stdInputArgumentsArray[9] = "10";
-            TimeSpan timeSpan = TimeSpan.Parse("001:2");
-            Assert.AreEqual(timeSpan, Order.CreateOrder(stdInputArgumentsArray).ValidityTimePeriode);
-
-        }
-
-        [Test()]
-        public void TestModifyOrder()
-        {
-            //Exmaple order5 : ABCDEFGH1234" SELL GFD 1000 10 EUR Germany MM/dd/yyyy h:mm tt 02.00:00:00 0.00:00:1000  0order1
-            order5.Ticker = "ABCDEFGH1234";
-            order5.OperationType = Operation_type.SELL;
-            order5.OrderTrade = Order_type.GFD;
-            order5.OrderPrice = 1000;
-            order5.OrderQuantity = 50;
-            order5.Devise = Devise.EUR;
-            order5.Country = "Germany";
-            order5.DateCreateOrder = DateTime.Now;
-            // format TimeSpan dd.hh:mm:ss
-            order5.ValidityTimePeriode = new TimeSpan(02, 0, 0, 0);
-            order5.ValidityAbsoluteTime = new TimeSpan(0, 0, 0, 1000);
-
-            SellTable.Selltable.Add(order5);
-            TradeTable.ModifyOrder(order5, 20);
-            Assert.AreEqual(30, order5.OrderQuantity);
-
-        }
-            /* [Test()]
-            public void TestGetProductByTicker(string Ticker)
-            {
-                Product p1 = new Product();
-                Product p2 = new Product();
-                Product p3 = new Product();
-
-                p1.Ticker = "ABFDHSBR";
-                p1.Quantity = Quantity.TONS;
-                p1.Designation = "olivier";
-                p2.Ticker = "ABCDEFGH";
-                p2.Quantity = Quantity.TONS;
-                p2.Designation = "Chemical Composition";
-                p3.Ticker = "ABCDKLMN";
-                p3.Quantity = Quantity.TONS;
-                p3.Designation = "corn";
-
-
-
-
-                Product.Products.Add(p1);
-                Product.Products.Add(p2);
-                Product.Products.Add(p2);
-                Assert.AreEqual(p1, Product.GetProductByTicker("ABFDHSBR"));
-            }
-            */
-
 
 
         }

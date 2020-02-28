@@ -11,51 +11,52 @@ namespace Engine
     {
         public static Dictionary<string, List<Order>> BuyTables = new Dictionary<string, List<Order>>();
         public static Dictionary<string, List<Order>> SellTables = new Dictionary<string, List<Order>>();
-
-
+        private string sellOrderId;
         private Order orderTradeBuy;
-        private int orderQuantityBuy;
         private int orderPriceBuy;
         private Devise deviseBuy;
-        private CountryList countryBuy;
+        private string countryBuy;
         private DateTime dateCreateOrderBuy;
         private TimeSpan validityTimePeriodeBuy;
         private TimeSpan validityAbsoluteTimeBuy;
 
+        private int orderQuantityTraded;
 
+        private string buyOrderId;
         private Order orderTradeSell;
-        private int orderQuantitySell;
         private int orderPriceSell;
         private Devise deviseSell;
-        private CountryList countrySell;
+        private string countrySell;
         private DateTime dateCreateOrderSell;
         private TimeSpan validityTimePeriodeSell;
         private TimeSpan validityAbsoluteTimeSell;
 
         public Order OrderTradeBuy { get => orderTradeBuy; set => orderTradeBuy = value; }
-        public int OrderQuantityBuy { get => orderQuantityBuy; set => orderQuantityBuy = value; }
         public int OrderPriceBuy { get => orderPriceBuy; set => orderPriceBuy = value; }
         public Devise DeviseBuy { get => deviseBuy; set => deviseBuy = value; }
-        public CountryList CountryBuy { get => countryBuy; set => countryBuy = value; }
+        public string CountryBuy { get => countryBuy; set => countryBuy = value; }
         public DateTime DateCreateOrderBuy { get => dateCreateOrderBuy; set => dateCreateOrderBuy = value; }
         public TimeSpan ValidityTimePeriodeBuy { get => validityTimePeriodeBuy; set => validityTimePeriodeBuy = value; }
         public TimeSpan ValidityAbsoluteTimeBuy { get => validityAbsoluteTimeBuy; set => validityAbsoluteTimeBuy = value; }
+       
+         public int OrderQuantityTraded { get => orderQuantityTraded; set => orderQuantityTraded = value; }
 
         public Order OrderTradeSell { get => orderTradeSell; set => orderTradeSell = value; }
-        public int OrderQuantitySell { get => orderQuantitySell; set => orderQuantitySell = value; }
         public int OrderPriceSell { get => orderPriceSell; set => orderPriceSell = value; }
         public Devise DeviseSell { get => deviseSell; set => deviseSell = value; }
-        public CountryList CountrySell { get => countrySell; set => countrySell = value; }
+        public string CountrySell { get => countrySell; set => countrySell = value; }
         public DateTime DateCreateOrderSell { get => dateCreateOrderSell; set => dateCreateOrderSell = value; }
         public TimeSpan ValidityTimePeriodeSell { get => validityTimePeriodeSell; set => validityTimePeriodeSell = value; }
         public TimeSpan ValidityAbsoluteTimeSell { get => validityAbsoluteTimeSell; set => validityAbsoluteTimeSell = value; }
+        public string SellOrderId { get => sellOrderId; set => sellOrderId = value; }
+        public string BuyOrderId { get => buyOrderId; set => buyOrderId = value; }
+
 
 
         public TradeTable()
         {
 
             OrderTradeBuy = orderTradeBuy;
-            OrderQuantityBuy = orderQuantityBuy;
             OrderPriceBuy = orderPriceBuy;
             DeviseBuy = deviseBuy;
             CountryBuy = countryBuy;
@@ -63,8 +64,9 @@ namespace Engine
             ValidityTimePeriodeBuy = validityTimePeriodeBuy;
             ValidityAbsoluteTimeBuy = validityAbsoluteTimeBuy;
 
+            OrderQuantityTraded = orderQuantityTraded;
+
             OrderTradeSell = orderTradeSell;
-            OrderQuantitySell = orderQuantitySell;
             OrderPriceSell = orderPriceSell;
             DeviseSell = deviseSell;
             CountrySell = countrySell;
@@ -127,105 +129,60 @@ namespace Engine
         public static bool IsTrade()
         {
             if (BuyTables.Equals(0) || SellTables.Equals(0)) return false;
-
-            if (!BuyTables.Equals(0) && !SellTables.Equals(0))
-            {
-                return true;
+                int i = 0;
+                foreach (var key in BuyTables.Keys)
+                {
+                    Console.WriteLine("key ===>" + key);
+                if (SellTables.ContainsKey(key)) i++;
             }
+            if (!BuyTables.Equals(0) && !SellTables.Equals(0) && i != 0) return true;
+
             return false;
         }
 
-        // check the validity of the trade
-        public static bool IsValidTrade(Operation_type operation_Type, Order order)
+
+       public static bool IsValidTrade(string operation, string[] operation_statement_array)
         {
-            if (operation_Type == Operation_type.BUY
-                || operation_Type == Operation_type.SELL
-                || operation_Type == Operation_type.MODIFY)
+            if (operation.Equals(Operation_type.BUY.ToString())
+                || operation.Equals(Operation_type.SELL.ToString()))
+
             {
-                //return true if arguments Order is valide
-                if (order.IsValideOrder()) return true;
+                //return true if arguments passed are 11
+                if (operation_statement_array.Length.Equals(11)) return true;
             }
-            else if (operation_Type == Operation_type.CANCEL)
+            else if (operation.Equals(Operation_type.MODIFY.ToString()))
             {
-                //return true if arguments Order CANCEL is valide
-                if (order.IsValideOrder()) return true;
+
+                //return true if arguments passed are 5
+                if (operation_statement_array.Length.Equals(5)) return true;
             }
-            else if (operation_Type == Operation_type.PRINT)
+            else if (operation.Equals(Operation_type.CANCEL.ToString()))
             {
-                //return true if arguments Order PRINT is valide
-                if (order.IsValideOrder()) return true;
+                //return true if arguments passed are 2
+                if (operation_statement_array.Length.Equals(2)) return true;
+            }
+            else if (operation.Equals(Operation_type.PRINT.ToString()))
+            {
+                //return true if arguments passed are 1
+                if (operation_statement_array.Length.Equals(1)) return true;
             }
 
 
             return false;
         }
+
+
+
+
 
         // return a minimum between two integers
-        static int ReturnLeastNumber(int a, int b)
+       public static int ReturnLeastNumber(int a, int b)
         {
             //int min = 0;
             if (a <= b) return a;
             else return b;
 
         }
-
-
-
-        // SellTrade
-
-        public static void SellTrade(int idOrderSell, string Ticker)
-        {
-
-
-            // Get BuyTable by Ticker
-            var buyTable = BuyTable.GetBuyTableByTicker(Ticker);
-            // Sort buytable by OrderPrice
-            var sortedBuyTable = buyTable.OrderByDescending(n => n.OrderPrice).ToList();
-
-
-            int index = 0;
-            foreach (var buyOrder in sortedBuyTable)
-            {
-                // Get an Order from SellTables
-                var sellOrder = SellTables[Ticker][idOrderSell];
-                if (sellOrder == null)
-                { continue; }
-                var sellOrderPrice = sellOrder.OrderPrice;
-                var sellOrderQunt = sellOrder.OrderQuantity;
-                var sellOrderType = sellOrder.OrderTrade;
-
-                if (sellOrderPrice > buyOrder.OrderPrice && index.Equals(0)) return;
-
-                var num_traded = ReturnLeastNumber(sellOrderQunt, buyOrder.OrderQuantity);
-
-                //Update OrderQuantity
-
-                ModifyOrder(sellOrder, num_traded);
-                ModifyOrder(buyOrder, num_traded);
-
-                if (sellOrderType.Equals(Order_type.IOC))
-                {
-                    SellTables[Ticker].Remove(sellOrder);
-
-                    // break;
-                }
-                if (buyOrder.OrderTrade.Equals(Order_type.IOC))
-                {
-                    BuyTables[Ticker].Remove(buyOrder);
-                    // break;
-                }
-
-                index++;
-
-            }
-        }
-
-
-
-
-
-
-
 
 
         // Modify Table
@@ -235,34 +192,37 @@ namespace Engine
             if (order.OperationType == Operation_type.SELL)
             {
                 //(currentSellOrderID, operation_type.SELL, currentSellOrderPrice, num_traded, currentSellOrderType);
-                if (SellTable.Selltable.Contains(order))
+                if (TradeTable.SellTables[order.Ticker].Contains(order))
                 {
 
-
                     var temp = order.OrderQuantity - numTraded;
-                   
 
 
 
                     if (temp <= 0)
                     {
-                        SellTable.Selltable.Remove(order);
+                        OrderBook.Selltable.Remove(order);
                     }
                     else
                     {
-
                         order.OrderQuantity = order.OrderQuantity - numTraded;
                     }
 
-
                 }
-                if (BuyTable.Buytable.Contains(order))
+
+            }
+            if (order.OperationType == Operation_type.BUY)
+            {
+
+                if (TradeTable.BuyTables[order.Ticker].Contains(order))
                 {
 
                     var temp = order.OrderQuantity - numTraded;
+                    Console.WriteLine("temp **** Buytable ====>" + temp);
                     if (temp<= 0)
                     {
-                        BuyTable.Buytable.Remove(order);
+                        Console.WriteLine("OrderBook.Buytable.Remove(order)");
+                        OrderBook.Buytable.Remove(order);
                     }
                     else
                     {

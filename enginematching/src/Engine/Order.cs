@@ -19,6 +19,7 @@ namespace Engine
     // class Order 
     public class Order
     {
+        private string orderId;
         private static List<Order> orders = new List<Order>();
         private string ticker;
         private Operation_type operationType;
@@ -30,7 +31,7 @@ namespace Engine
         private DateTime dateCreateOrder;
         private TimeSpan validityTimePeriode;
         private TimeSpan validityAbsoluteTime;
-
+      
         public string Ticker { get => ticker; set => ticker = value; }
         public Operation_type OperationType { get => operationType; set => operationType = value; }
         public Order_type OrderTrade { get => orderTrade; set => orderTrade = value; }
@@ -42,11 +43,14 @@ namespace Engine
         public TimeSpan ValidityAbsoluteTime { get => validityAbsoluteTime; set => validityAbsoluteTime = value; }
         public string Country { get => country; set => country = value; }
         public static List<Order> Orders { get => orders; set => orders = value; }
+        public  string OrderId { get => orderId; set => orderId = value; }
+
 
 
         // Constructor 
         public Order()
         {
+
             Ticker = ticker;
             OperationType = operationType;
             OrderTrade = orderTrade;
@@ -59,6 +63,9 @@ namespace Engine
             ValidityAbsoluteTime = validityAbsoluteTime;
 
         }
+
+       
+
         public static void AddOrder(Order order)
         {
             Orders.Add(order);
@@ -90,12 +97,7 @@ namespace Engine
 
         }
 
-        // check the validity of an Order
-        public bool IsValideOrder()
-        {
-            return true;
-        }
-
+       
         //return an OrderID by from ListOrder
         public static int GetOrderIdByOrder(Order _Order)
         {
@@ -206,18 +208,20 @@ namespace Engine
 
             Order _Order = new Order
             {
-                //Exmaple :  //Exmaple order1 : ABCDEFGH1234" BUY GFD 1000 10 EUR Germany MM/dd/yyyy h:mm tt 02.00:00:00 0.00:00:1000  0order1
-                Ticker = Convert.ToString(stdInputArgumentsArray[0]),
-                OperationType = Order.GetOperationType(stdInputArgumentsArray[1]),
-                OrderTrade = Order.GetOrderType(stdInputArgumentsArray[2]),
-                OrderPrice = Convert.ToInt32(stdInputArgumentsArray[3]),
-                OrderQuantity = Convert.ToInt32(stdInputArgumentsArray[4]),
-                Devise = Order.GetDevise(stdInputArgumentsArray[5]),
+                //Exmaple :  //Exmaple order1 :  BUY GFD 1000 10 EUR ABCDEFGH1234 Germany MM/dd/yyyy h:mm tt 02.00:00:00 0.00:00:1000  0order1
+
+                OperationType = Order.GetOperationType(stdInputArgumentsArray[0]),
+                OrderTrade = Order.GetOrderType(stdInputArgumentsArray[1]),
+                OrderPrice = Convert.ToInt32(stdInputArgumentsArray[2]),
+                OrderQuantity = Convert.ToInt32(stdInputArgumentsArray[3]),
+                Devise = Order.GetDevise(stdInputArgumentsArray[4]),
+                Ticker = Convert.ToString(stdInputArgumentsArray[5]),
                 Country = stdInputArgumentsArray[6],
                 DateCreateOrder = Order.CovertToDateTime(stdInputArgumentsArray[7]),
                 // format TimeSpan dd.hh:mm:ss
-               ValidityTimePeriode = Order.ConvertToTimeSpan(stdInputArgumentsArray[8]),
-               ValidityAbsoluteTime = Order.ConvertToTimeSpan(stdInputArgumentsArray[9])
+                ValidityTimePeriode = Order.ConvertToTimeSpan(stdInputArgumentsArray[8]),
+                ValidityAbsoluteTime = Order.ConvertToTimeSpan(stdInputArgumentsArray[9]),
+                OrderId = Convert.ToString(stdInputArgumentsArray[10])
             };
 
 
