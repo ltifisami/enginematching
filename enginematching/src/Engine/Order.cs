@@ -8,19 +8,18 @@ namespace Engine
     //enumerator list for the type of order
     public enum Order_type { IOC, GFD, INV, ICB, DRT, BPR };
     // enumerator list for the type of trade
-    public enum Operation_type { BUY, SELL, CANCEL, PRINT, MODIFY };
+    public enum Operation_type { BUY , SELL, CANCEL, PRINT, MODIFY };
     //enumerator list for Currency
-    public enum Devise { EUR, GBD, YEN, CHF, USD, REM_reminbi };
+    public enum Devise { EUR , GBD, CHF, YEN ,USD, REM_reminbi };
     // enumarator list for UNIT 
     public enum Quantity { TONS, UNIT };
 
 
 
     // class Order 
-    public class Order
+    public class Order : IOrder
     {
         private string orderId;
-        private static List<Order> orders = new List<Order>();
         private string ticker;
         private Operation_type operationType;
         private Order_type orderTrade;
@@ -29,9 +28,8 @@ namespace Engine
         private Devise devise;
         private string country;
         private DateTime dateCreateOrder;
-        private TimeSpan validityTimePeriode;
-        private TimeSpan validityAbsoluteTime;
-      
+        private DateTime dateEndOrder;
+
         public string Ticker { get => ticker; set => ticker = value; }
         public Operation_type OperationType { get => operationType; set => operationType = value; }
         public Order_type OrderTrade { get => orderTrade; set => orderTrade = value; }
@@ -39,11 +37,10 @@ namespace Engine
         public int OrderPrice { get => orderPrice; set => orderPrice = value; }
         public Devise Devise { get => devise; set => devise = value; }
         public DateTime DateCreateOrder { get => dateCreateOrder; set => dateCreateOrder = value; }
-        public TimeSpan ValidityTimePeriode { get => validityTimePeriode; set => validityTimePeriode = value; }
-        public TimeSpan ValidityAbsoluteTime { get => validityAbsoluteTime; set => validityAbsoluteTime = value; }
+        public DateTime DateEndOrder { get => dateEndOrder; set => dateEndOrder = value; }
         public string Country { get => country; set => country = value; }
-        public static List<Order> Orders { get => orders; set => orders = value; }
         public  string OrderId { get => orderId; set => orderId = value; }
+
 
 
 
@@ -58,59 +55,14 @@ namespace Engine
             OrderPrice = orderPrice;
             Devise = devise;
             Country = Country;
-            DateCreateOrder = dateCreateOrder;
-            ValidityTimePeriode = validityTimePeriode;
-            ValidityAbsoluteTime = validityAbsoluteTime;
+            DateCreateOrder = DateTime.Now;
+            DateEndOrder = dateEndOrder;
 
         }
 
        
 
-        public static void AddOrder(Order order)
-        {
-            Orders.Add(order);
-        }
-
-
-        // Verify the  validity time Period of an Order 
-        public bool IsValidateTimePeriode()
-        {
-            TimeSpan interval = DateTime.Now - this.DateCreateOrder;
-
-            if (this.ValidityTimePeriode.Days > interval.Days)
-                return true;
-            else
-                return false;
-
-        }
-
-        // Verify the  validity time absolute of an Order 
-        public bool IsValidateAbsoluteTime()
-        {
-
-            TimeSpan interval = DateTime.Now - DateCreateOrder;
-
-            if (this.ValidityAbsoluteTime.Seconds > interval.Seconds)
-                return true;
-            else
-                return false;
-
-        }
-
-       
-        //return an OrderID by from ListOrder
-        public static int GetOrderIdByOrder(Order _Order)
-        {
-            if (Orders.Contains(_Order))
-            {
-                return orders.IndexOf(_Order);
-            }
-            return -1;
-        }
-
-
-
-        public static Order_type GetOrderType(string current_order)
+        public  Order_type GetOrderType(string current_order)
         {
 
 
@@ -129,7 +81,7 @@ namespace Engine
         }
 
 
-        public static Operation_type GetOperationType(string current_order)
+        public  Operation_type GetOperationType(string current_order)
         {
 
 
@@ -157,7 +109,37 @@ namespace Engine
             else return Operation_type.PRINT;
         }
 
-        public static Devise GetDevise(string current_order)
+
+        // Covert Devise to string
+        public string ConvertDeviseToString(IOrder order)
+        {
+            if (order.Devise == Devise.EUR)
+            {
+                return "EUR";
+
+            }
+            else if (order.Devise == Devise.USD)
+            {
+                return "USD";
+            }
+            else if (order.Devise == Devise.GBD)
+            {
+                return "GBD";
+            }
+            else if (order.Devise == Devise.CHF)
+            {
+                return "CHF";
+            }
+            else if (order.Devise == Devise.REM_reminbi)
+            {
+                return "REM_reminbi";
+            }
+            else return "YEN";
+        }
+
+
+
+        public  Devise GetDevise(string current_order)
         {
 
 
@@ -189,103 +171,42 @@ namespace Engine
             }
             else return Devise.YEN;
         }
-        public static DateTime CovertToDateTime(string dateTime)
-        { 
-           DateTime dateTimee = new DateTime();
-            try
-            {
-                dateTimee = Convert.ToDateTime(dateTime);
-            }
-            catch (FormatException)
-            {
 
-            }
-            return dateTimee;
-        }
 
-        public static Order CreateOrder(string[] stdInputArgumentsArray)
+        public Order CreateOrder(string[] stdInputArgumentsArray)
         {
-
-            Order _Order = new Order
+            string dateEnd = String.Concat(stdInputArgumentsArray[7] ," " ,stdInputArgumentsArray[8]);
+                       Order _Order = new Order
             {
-                //Exmaple :  //Exmaple order1 :  BUY GFD 1000 10 EUR ABCDEFGH1234 Germany MM/dd/yyyy h:mm tt 02.00:00:00 0.00:00:1000  0order1
+                //Exmaple order1 :  BUY GFD 1000 10 EUR ABCDEFGH1234 Germany MM-DD-yyyy h:mm:tt order1
 
-                OperationType = Order.GetOperationType(stdInputArgumentsArray[0]),
-                OrderTrade = Order.GetOrderType(stdInputArgumentsArray[1]),
+                OperationType = this.GetOperationType(stdInputArgumentsArray[0]),
+                OrderTrade = this.GetOrderType(stdInputArgumentsArray[1]),
                 OrderPrice = Convert.ToInt32(stdInputArgumentsArray[2]),
                 OrderQuantity = Convert.ToInt32(stdInputArgumentsArray[3]),
-                Devise = Order.GetDevise(stdInputArgumentsArray[4]),
+                Devise = this.GetDevise(stdInputArgumentsArray[4]),
                 Ticker = Convert.ToString(stdInputArgumentsArray[5]),
                 Country = stdInputArgumentsArray[6],
-                DateCreateOrder = Order.CovertToDateTime(stdInputArgumentsArray[7]),
-                // format TimeSpan dd.hh:mm:ss
-                ValidityTimePeriode = Order.ConvertToTimeSpan(stdInputArgumentsArray[8]),
-                ValidityAbsoluteTime = Order.ConvertToTimeSpan(stdInputArgumentsArray[9]),
-                OrderId = Convert.ToString(stdInputArgumentsArray[10])
+                DateEndOrder= Convert.ToDateTime(dateEnd),
+                OrderId = Convert.ToString(stdInputArgumentsArray[9])
             };
-
+            if (DateTime.Compare(_Order.DateEndOrder, _Order.DateCreateOrder) < 0) return null;
 
             return _Order;
 
         }
 
-
-
-
-        // Convert a string_Timespan to TimeSpan
-        public static TimeSpan ConvertToTimeSpan(string _timeSpan)
+        // Return a List of Orders between startTime and endTime
+         public List<IOrder> GetOrders(DateTime start, DateTime end)
         {
+            List<IOrder> _orders = new List<IOrder>();
 
-            TimeSpan timeSpan = new TimeSpan();
-
-            try
+            foreach(var order in OrderBook.OrderBookCollection.Values)
             {
-                timeSpan = TimeSpan.Parse(_timeSpan);
+                if (DateTime.Compare(start, order.DateCreateOrder)  <= 0  && DateTime.Compare(end , order.DateEndOrder) <= 0) _orders.Add(order);
             }
-            catch (FormatException)
-            {
-
-            }
-
-            return timeSpan;
-
+            return _orders;
         }
-
-
-
-
-
-
-
-
-
-        /*  // Create an Order from an Array
-          static Order objectSetter(Order _order, string[] stdInputArgumentsArray)
-          {
-              try
-              {
-
-                  if (Convert.ToInt32(stdInputArgumentsArray[2]) <= 0 || Convert.ToInt32(stdInputArgumentsArray[3]) <= 0) return _orderTable;
-                  _order.order_price = Convert.ToInt32(stdInputArgumentsArray[2]); ;
-                  _order.order_quantity = Convert.ToInt32(stdInputArgumentsArray[3]);
-                  if (getOrderType(stdInputArgumentsArray[1]).Equals(order_type.GFD))
-                  {
-                      //GFD Operation
-                      _orderTable.order_trade = order_type.GFD;
-                  }
-                  else if (getOrderType(stdInputArgumentsArray[1]).Equals(order_type.IOC))
-                  {
-                      //IOC operation
-                      _orderTable.order_trade = order_type.IOC;
-                  }
-                  else _orderTable.order_trade = order_type.INV;
-
-                  return _orderTable;
-              }
-              catch { return _orderTable; }
-          }
-          */
-
     }
 
 }

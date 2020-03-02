@@ -2,8 +2,10 @@
 
 
 
+using System;
 using System.Collections.Generic;
 using Engine;
+using static Engine.CurrencyRates;
 
 namespace EngineMatching
 {
@@ -15,11 +17,22 @@ namespace EngineMatching
         public static void Main(string[] args)
         {
 
-            OrderBook orderBook = new OrderBook();
+
+           
+                OrderBook orderBook = new OrderBook();
 
 
-            orderBook.CreateOrderBook();
-        }
+                orderBook.CreateOrderBook();
+
+                Console.WriteLine("OrderBookCollection   :");
+                Console.WriteLine();
+                orderBook.WriteOrderBookCollection();
+                Console.WriteLine("Tradetable   :");
+                Console.WriteLine();
+                orderBook.WriteTradeTable();
+               
+               
+            }
 
 
 

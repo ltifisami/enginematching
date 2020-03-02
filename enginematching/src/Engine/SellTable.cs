@@ -7,8 +7,8 @@ namespace Engine
     {
 
 
-        private static List<Order> selltable = new List<Order>();
-        public static List<Order> Selltable { get => selltable; set => selltable = value; }
+        private static List<IOrder> selltable = new List<IOrder>();
+        public static List<IOrder> Selltable { get => selltable; set => selltable = value; }
 
 
 
@@ -45,7 +45,7 @@ namespace Engine
 
 
         //return an OrderBuy by IdOrder from BuyTable
-        public static Order GetSellOrderByOrderId(int idOrder)
+        public static IOrder GetSellOrderByOrderId(int idOrder)
         {
 
             return Selltable[idOrder];
@@ -73,34 +73,7 @@ namespace Engine
             }
         }
 
-        //Return SellTable by Ticker 
-        public static List<Order> GetSellTableByTicker(string _Ticker)
-        {
-            List<Order> Orderlist = new List<Order>();
-            foreach (var sellOrder in Selltable)
-            {
-                if (sellOrder.Ticker == _Ticker)
-                {
-                    Orderlist.Add(sellOrder);
-                }
-
-            }
-            return Orderlist;
-
-        }
-
-        // Return List of SellTicker from Selltable
-
-        public static List<string> ListSellTicker()
-        {
-            List<string> listTicker = new List<string>();
-            foreach (var order in Selltable)
-            {
-                if (!listTicker.Contains(order.Ticker))
-                    listTicker.Add(order.Ticker);
-            }
-            return listTicker;
-        }
+      
 
     }
 }

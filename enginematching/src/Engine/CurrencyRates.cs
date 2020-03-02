@@ -16,7 +16,7 @@ namespace Engine
         public Dictionary<string, decimal> Rates { get; set; }
         public DateTime FomatTimeStamp()
         {
-            System.DateTime date = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
+            System.DateTime date = new System.DateTime(2020, 02, 29, 23, 57, 0);
             date = date.AddSeconds(TimeStamp);
             return date;
         }
@@ -35,7 +35,8 @@ namespace Engine
                     {
                         json_data = w.DownloadString(url);
                     }
-                    catch (Exception) { }
+                    catch (Exception E) 
+                    { Console.WriteLine(E); }
 
                     // if string with JSON data is not empty, deserialize it to class and return its instance
 
@@ -43,9 +44,9 @@ namespace Engine
                     JsonConvert.DeserializeObject<T>(json_data) : new T();
                 }
             }
-            public CurrencyRates getCurrencyRates()
+            public CurrencyRates GetCurrencyRates()
             {            // pour les derniers taux
-                var url = "https://openexchangerates.org/api/latest.json?app_id=id=598f07044ff143f19feebcdf138206cc";
+                var url = "https://openexchangerates.org/api/latest.json?app_id=682dae468d9749c0967f48db79735745";
 
                 var currencyRates = _download_serialized_json_data<CurrencyRates>(url);
 
