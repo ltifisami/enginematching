@@ -5,21 +5,23 @@ using System.Diagnostics.Contracts;
 
 namespace Engine
 {
-    //enumerator list for the type of order
+    // Enumerator list for the type of order
     public enum Order_type { IOC, GFD, INV, ICB, DRT, BPR };
-    // enumerator list for the type of trade
+    // Enumerator list for the type of trade
     public enum Operation_type { BUY , SELL, CANCEL, PRINT, MODIFY };
-    //enumerator list for Currency
+    // Enumerator list for Currency
     public enum Devise { EUR , GBD, CHF, YEN ,USD, REM_reminbi };
-    // enumarator list for UNIT 
+    // Enumarator list for UNIT 
     public enum Quantity { TONS, UNIT };
-
+    // Enumarator list for Statue
+    public enum Statue { CANCELLED, MATCHED, SETTELED, UNAVAILABLE ,NOT_MATCHED};
 
 
     // class Order 
     public class Order : IOrder
     {
         private string orderId;
+        private Statue statue;
         private string ticker;
         private Operation_type operationType;
         private Order_type orderTrade;
@@ -39,7 +41,8 @@ namespace Engine
         public DateTime DateCreateOrder { get => dateCreateOrder; set => dateCreateOrder = value; }
         public DateTime DateEndOrder { get => dateEndOrder; set => dateEndOrder = value; }
         public string Country { get => country; set => country = value; }
-        public  string OrderId { get => orderId; set => orderId = value; }
+        public string OrderId { get => orderId; set => orderId = value; }
+        public Statue Statue { get => statue; set => statue = value; }
 
 
 
@@ -57,11 +60,14 @@ namespace Engine
             Country = Country;
             DateCreateOrder = DateTime.Now;
             DateEndOrder = dateEndOrder;
-
         }
 
-       
 
+        //
+
+
+       
+        // Return a type of the Order
         public  Order_type GetOrderType(string current_order)
         {
 
@@ -173,24 +179,26 @@ namespace Engine
         }
 
 
-        public Order CreateOrder(string[] stdInputArgumentsArray)
+        public Order CreateOrder(string[] OrderArray)
         {
-            string dateEnd = String.Concat(stdInputArgumentsArray[7] ," " ,stdInputArgumentsArray[8]);
+            string dateEnd = String.Concat(OrderArray[7] ," " , OrderArray[8]);
                        Order _Order = new Order
             {
                 //Exmaple order1 :  BUY GFD 1000 10 EUR ABCDEFGH1234 Germany MM-DD-yyyy h:mm:tt order1
 
-                OperationType = this.GetOperationType(stdInputArgumentsArray[0]),
-                OrderTrade = this.GetOrderType(stdInputArgumentsArray[1]),
-                OrderPrice = Convert.ToInt32(stdInputArgumentsArray[2]),
-                OrderQuantity = Convert.ToInt32(stdInputArgumentsArray[3]),
-                Devise = this.GetDevise(stdInputArgumentsArray[4]),
-                Ticker = Convert.ToString(stdInputArgumentsArray[5]),
-                Country = stdInputArgumentsArray[6],
+                OperationType = this.GetOperationType(OrderArray[0]),
+                OrderTrade = this.GetOrderType(OrderArray[1]),
+                OrderPrice = Convert.ToInt32(OrderArray[2]),
+                OrderQuantity = Convert.ToInt32(OrderArray[3]),
+                Devise = this.GetDevise(OrderArray[4]),
+                Ticker = Convert.ToString(OrderArray[5]),
+                Country = OrderArray[6],
                 DateEndOrder= Convert.ToDateTime(dateEnd),
-                OrderId = Convert.ToString(stdInputArgumentsArray[9])
+                OrderId = Convert.ToString(OrderArray[9])
             };
-            if (DateTime.Compare(_Order.DateEndOrder, _Order.DateCreateOrder) < 0) return null;
+
+            if (DateTime.Compare(_Order.DateEndOrder, _Order.DateCreateOrder) < 0) _Order.Statue = Statue.UNAVAILABLE;
+            else _Order.Statue = Statue.NOT_MATCHED;
 
             return _Order;
 

@@ -16,9 +16,9 @@ namespace Engine
         DateTime DateEndOrder { get; set; }
         string Country { get; set; }
         string OrderId { get; set; }
+        Statue Statue { get; set; }
 
-
-         Order_type GetOrderType(string current_order);
+        Order_type GetOrderType(string current_order);
          Operation_type GetOperationType(string current_order);
          Devise GetDevise(string current_order);
          Order CreateOrder(string[] stdInputArgumentsArray);

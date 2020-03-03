@@ -57,6 +57,10 @@
     <Compile Include="src\Markets\IMarketManager.cs" />
     <Compile Include="src\Markets\MarketManagerFacade.cs" />
     <Compile Include="src\Engine\IOrder.cs" />
+    <Compile Include="src\Markets\IMarket.cs" />
+    <Compile Include="src\Engine\Matching.cs" />
+    <Compile Include="src\Engine\IMatching.cs" />
+    <Compile Include="src\Engine\Command.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -6,74 +6,35 @@ namespace Engine
     public class SellTable
     {
 
+        public static List<IOrder> Selltable = new List<IOrder>();
 
-        private static List<IOrder> selltable = new List<IOrder>();
-        public static List<IOrder> Selltable { get => selltable; set => selltable = value; }
-
-
-
-
-        // Constructeur BuyTable 
-        public SellTable(Order _order)
-        {
-
-            if (_order.OperationType == Operation_type.SELL)
-            {
-                Selltable.Add(_order);
-
-            }
-        }
+        public static Dictionary<string, List<IOrder>> SellTables = new Dictionary<string, List<IOrder>>();
 
         public SellTable()
         {
-
-            selltable = Selltable;
         }
 
-        // return IdOrder of an Order from Buytable collection
-        public static int GetSellOrderId(Order _order)
+        public static void AddSellOrderInSellTables(Order _order)
         {
-            if (Selltable.Contains(_order))
+            if (!SellTables.ContainsKey(_order.Ticker))
             {
-                return Selltable.IndexOf(_order);
+                List<IOrder> _Selltable = new List<IOrder>
+                {
+                    _order
+                };
+                SellTables.Add(_order.Ticker, _Selltable);
             }
             else
             {
-                return -1;
-            }
-        }
-
-
-        //return an OrderBuy by IdOrder from BuyTable
-        public static IOrder GetSellOrderByOrderId(int idOrder)
-        {
-
-            return Selltable[idOrder];
-
-        }
-
-        // Remove an Order from BuyTable 
-        public void RemoveBuyOrder(Order order)
-        {
-            if (Selltable.Contains(order))
-            {
-                Selltable.Remove(order);
+                SellTables[_order.Ticker].Add(_order);
             }
 
         }
-        // Add an Order to BuyTable 
-        public void AddSellOrder(Order _order)
-        {
 
 
-            if (_order.OperationType == Operation_type.BUY && !Selltable.Contains(_order))
-            {
-                Selltable.Add(_order);
 
-            }
-        }
 
-      
+
 
     }
 }

@@ -21,7 +21,8 @@ namespace Engine
         public  void TestCase()
         {
 
-            //Exmaple order1 : ABCDEFGH1234" BUY GFD 1000 10 EUR Germany MM/dd/yyyy h:mm tt 02.00:00:00 0.00:00:1000  0order1
+            //Exmaple order1 : ABCDEFGH1234 BUY GFD 1000 10 EUR Germany MM/dd/yyyy h:mm tt 02.00:00:00 0.00:00:1000  0order1
+
             order1.Ticker = "ABCDEFGH1234";
             order1.OperationType = Operation_type.BUY;
             order1.OrderTrade = Order_type.GFD;
@@ -30,6 +31,7 @@ namespace Engine
             order1.Devise = Devise.EUR;
             order1.Country = "Germany";
             order1.DateCreateOrder = DateTime.Now;
+
              //Exmaple order2 : ABCDEFGH1234" SELL GFD 900 20 EUR Italy MM/dd/yyyy h:mm tt 01.00:00:00 0.00:00:1000  0order2
 
 
@@ -118,54 +120,11 @@ namespace Engine
             order4.Country = "USA";
             order4.DateCreateOrder = DateTime.Now;
            
-
-            buytable.AddBuyOrder(order1);
-            selltable.AddSellOrder(order2);
-            buytable.AddBuyOrder(order3);
-            buytable.AddBuyOrder(order4);
-            Assert.AreEqual(3, BuyTable.Buytable.Count);
-
+          
         }
 
        
-        [Test()]
-        // Test :Remove an Order from BuyTable 
-        public void RemoveBuyOrder()
-        {
-            buytable.RemoveBuyOrder(order3);
-
-            Assert.IsFalse(BuyTable.Buytable.Contains(order3));
-
-        }
-
-        [Test()]
-        // Test :Remove an Order from BuyTable 
-        public void TestAddBuyOrder2()
-        {
-            buytable.AddBuyOrder(order3);
-
-            Assert.IsTrue(BuyTable.Buytable.Contains(order3));
-           
-        }
-
-
-        [Test()]
-        // Test :Return IdOrder of an Order from Buytable collection
-        public void TestGetBuyOrderID()
-        {
-            Assert.AreEqual(0, BuyTable.GetBuyOrderId(order1));
-            }
-
-
-        [Test()]
-        //Test :Return an OrderBuy by IdOrder from BuyTable
-        public void TestGetBuyOrderByOrderId()
-        {
-            Assert.AreEqual(order1, BuyTable.GetBuyOrderByOrderId(0));
-        }
-
-
-
+   
 
         [Test()]
         public void TestOrderCovertToDollar()
@@ -179,10 +138,10 @@ namespace Engine
             order5.OrderQuantity = 10;
             order5.Devise = Devise.EUR;
             order5.Country = "Germany";
-          
+            Matching matching = new Matching();
 
 
-            Assert.AreEqual(906.799000, OrderBook.CovertToDollar(order5));
+            Assert.AreEqual(906.799000, matching.CovertToDollar(order5));
 
 
 
