@@ -1,4 +1,5 @@
-﻿namespace Engine
+﻿
+namespace Engine
 {
     // class Price_delta_range
     public class PriceDeltaRange
@@ -13,8 +14,6 @@
         public int Range2 { get => range2; set => range2 = value; }
         public Devise Devise { get => devise; set => devise = value; }
         public float PriceDelta { get => priceDelta; set => priceDelta = value; }
-
-
 
 
         //Constructor

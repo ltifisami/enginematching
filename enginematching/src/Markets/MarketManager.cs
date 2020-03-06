@@ -25,8 +25,8 @@ namespace Markets
             Markets.Add(market.Ticker, market);
         }
 
-
-       public void AddMarket(Market market)
+      
+        public void AddMarket(Market market)
         {
             if (!Markets.ContainsKey(market.Ticker))
                 Markets.Add(market.Ticker, market);
@@ -64,7 +64,7 @@ namespace Markets
             else return "MarketPlace";
         }
 
-       
+      
     }
 
 }

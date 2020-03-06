@@ -2,92 +2,117 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Markets;
 
 namespace Engine
 {
     // Class TradeTable contains the Order matched
     public class TradeTable
     {
-       private string sellOrderId;
-        private Order orderTradeBuy;
-        private int orderPriceBuy;
-        private Devise deviseBuy;
-        private string countryBuy;
-        private DateTime dateCreateOrderBuy;
-        private DateTime dateEndOrderBuy;
-        private int orderQuantityTraded;
+       private string originalAskOrderId;
+        private Order originalAskTrade;
+        private int originalAskOrderPrice;
+        private Devise originalAskDevise;
+        private string originalAskCountry;
+        private DateTime originalAskDateCreate;
+        private DateTime originalAskDateEnd;
 
-        private string buyOrderId;
-        private Order orderTradeSell;
-        private int orderPriceSell;
-        private Devise deviseSell;
-        private string countrySell;
-        private DateTime dateCreateOrderSell;
-        private DateTime dateEndOrderSell;
+        private int tradedQuantity;
+        private float tradedPrice;
+
+        private string originalBidOrderId;
+        private Order originalBidTrade;
+        private int originalBidOrderPrice;
+        private Devise originalBidDevise;
+        private string originalBidCountry;
+        private DateTime originalBidDateCreate;
+        private DateTime originalBidDateEnd;
+
+        public string OriginalAskOrderId { get => originalAskOrderId; set => originalAskOrderId = value; }
+        public Order OriginalAskTrade { get => originalAskTrade; set => originalAskTrade = value; }
+        public int OriginalAskOrderPrice { get => originalAskOrderPrice; set => originalAskOrderPrice = value; }
+        public Devise OriginalAskDevise { get => originalAskDevise; set => originalAskDevise = value; }
+        public string OriginalAskCountry { get => originalAskCountry; set => originalAskCountry = value; }
+        public DateTime OriginalAskDateCreate { get => originalAskDateCreate; set => originalAskDateCreate = value; }
+        public DateTime OriginalAskDateEnd { get => originalAskDateEnd; set => originalAskDateEnd = value; }
 
 
-        public string BuyOrderId { get => buyOrderId; set => buyOrderId = value; }
-        public Order OrderTradeBuy { get => orderTradeBuy; set => orderTradeBuy = value; }
-        public int OrderPriceBuy { get => orderPriceBuy; set => orderPriceBuy = value; }
-        public Devise DeviseBuy { get => deviseBuy; set => deviseBuy = value; }
-        public string CountryBuy { get => countryBuy; set => countryBuy = value; }
-        public DateTime DateCreateOrderBuy { get => dateCreateOrderBuy; set => dateCreateOrderBuy = value; }
-        public DateTime DateEndOrderBuy { get => dateEndOrderBuy; set => dateEndOrderBuy = value; }
 
-        public int OrderQuantityTraded { get => orderQuantityTraded; set => orderQuantityTraded = value; }
 
-        public string SellOrderId { get => sellOrderId; set => sellOrderId = value; }
-        public Order OrderTradeSell { get => orderTradeSell; set => orderTradeSell = value; }
-        public int OrderPriceSell { get => orderPriceSell; set => orderPriceSell = value; }
-        public Devise DeviseSell { get => deviseSell; set => deviseSell = value; }
-        public string CountrySell { get => countrySell; set => countrySell = value; }
-        public DateTime DateCreateOrderSell { get => dateCreateOrderSell; set => dateCreateOrderSell = value; }
-        public DateTime DateEndOrderSell { get => dateEndOrderSell; set => dateEndOrderSell = value; }
+        public int TradedQuantity { get => tradedQuantity; set => tradedQuantity = value; }
+        public float TradedPrice { get => tradedPrice; set => tradedPrice = value; }
+
+
+        public string OriginalBidOrderId { get => originalBidOrderId; set => originalBidOrderId = value; }
+        public Order OriginalBidTrade { get => originalBidTrade; set => originalBidTrade = value; }
+        public int OriginalBidOrderPrice { get => originalBidOrderPrice; set => originalBidOrderPrice = value; }
+        public Devise OriginalBidDevise { get => originalBidDevise; set => originalBidDevise = value; }
+        public string OriginalBidCountry { get => originalBidCountry; set => originalBidCountry = value; }
+        public DateTime OriginalBidDateCreate { get => originalBidDateCreate; set => originalBidDateCreate = value; }
+        public DateTime OriginalBidDateEnd { get => originalBidDateEnd; set => originalBidDateEnd = value; }
+
 
         public TradeTable()
         {
+            OriginalAskOrderId = originalAskOrderId;
+            OriginalAskOrderPrice = originalAskOrderPrice;
+            OriginalAskDevise = originalAskDevise;
+            OriginalAskCountry = originalAskCountry;
 
-            OrderTradeBuy = orderTradeBuy;
-            OrderPriceBuy = orderPriceBuy;
-            DeviseBuy = deviseBuy;
-            CountryBuy = countryBuy;
-            DateCreateOrderBuy = dateCreateOrderBuy;
-            DateEndOrderBuy = dateEndOrderBuy;
+            TradedQuantity = tradedQuantity;
+            TradedPrice = tradedPrice;
 
-            OrderQuantityTraded = orderQuantityTraded;
-
-            OrderTradeSell = orderTradeSell;
-            OrderPriceSell = orderPriceSell;
-            DeviseSell = deviseSell;
-            CountrySell = countrySell;
-            DateCreateOrderSell = dateCreateOrderSell;
-            DateEndOrderSell = dateEndOrderSell;
-
+            OriginalBidOrderId = originalBidOrderId;
+            OriginalBidOrderPrice = originalBidOrderPrice;
+            OriginalBidDevise = originalBidDevise;
+            OriginalBidCountry = originalBidCountry;
         }
 
 
-        public static void AddTradeTable(IOrder buyOrder, IOrder sellOrder , int num_traded)
+
+         // Creates a tradeTable and adds it in TradeTable depending on Matching Type
+
+        public static void AddTradeTable(IOrder buyOrder, IOrder sellOrder, int num_traded , Matching_Type matching_Type)
         {
-            TradeTable tradeTable = new TradeTable()
-
+            TradeTable tradeTable = new TradeTable
             {
-                BuyOrderId = buyOrder.OrderId,
-                OrderPriceBuy = buyOrder.OrderPrice,
-                DeviseBuy = buyOrder.Devise,
-                CountryBuy = buyOrder.Country,
-                OrderQuantityTraded = num_traded,
-                SellOrderId = sellOrder.OrderId,
-                OrderPriceSell = sellOrder.OrderPrice,
-                DeviseSell = sellOrder.Devise,
-                CountrySell = sellOrder.Country
+                OriginalAskOrderId = buyOrder.OrderId,
+                OriginalAskOrderPrice = buyOrder.OrderPrice,
+                OriginalAskDevise = buyOrder.Devise,
+                OriginalAskCountry = buyOrder.Country,
+                TradedQuantity = num_traded,
+                OriginalBidOrderId = sellOrder.OrderId,
+                OriginalBidOrderPrice = sellOrder.OrderPrice,
+                OriginalBidDevise = sellOrder.Devise,
+                OriginalBidCountry = sellOrder.Country
+
+
             };
-
-            // Add the _tradeTable in Tradetable 
-
-
-            Matching.Tradetable.Add(tradeTable);
-
+            switch (matching_Type)
+            {
+                case Matching_Type.MANUAL:
+                    tradeTable.TradedPrice = buyOrder.OrderPrice;
+                    // Add the _tradeTable in Tradetable 
+                    Matching.Tradetable.Add(tradeTable);
+                    break;
+                case Matching_Type.MarketPlace_AVEREGE:
+                    tradeTable.TradedPrice = (buyOrder.OrderPrice + sellOrder.OrderPrice) / 2;
+                    // Add the _tradeTable in Tradetable 
+                    Matching.Tradetable.Add(tradeTable);
+                    break;
+                case Matching_Type.MarketPlace_BESTBUY:
+                    tradeTable.TradedPrice = sellOrder.OrderPrice;
+                    // Add the _tradeTable in Tradetable 
+                    Matching.Tradetable.Add(tradeTable);
+                    break;
+                case Matching_Type.MarketPlace_BESTSELL:
+                    tradeTable.TradedPrice = buyOrder.OrderPrice;
+                    // Add the _tradeTable in Tradetable 
+                    Matching.Tradetable.Add(tradeTable);
+                    break;
+                case Matching_Type.FIXING:
+                    break;
+            }
         }
 
     }

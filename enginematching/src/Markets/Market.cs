@@ -16,9 +16,7 @@ namespace Markets
     // enumerator list for UNIT 
     public enum Quantity { TONS, UNIT };
     // Enumerator List for Matching Type
-    public enum  Matching_Type { MANUAL , MarketPlace, FIXING };
-    // MATCHING_TYPE
-    public enum MarketPlace_Matching_Type { AVEREGE, BESTBUY, BESTSELL };
+    public enum  Matching_Type { MANUAL , MarketPlace_AVEREGE, MarketPlace_BESTBUY, MarketPlace_BESTSELL ,FIXING };
 
 
     // Class Market 
@@ -26,6 +24,7 @@ namespace Markets
     {
         private string ticker;
         // fixingPeriod is expressed in seconds
+        private bool directPartialOrderMatchingEnable;
         private int fixingPeriod;
         private DateTime marketInitDate;
         private int maxQuantity;
@@ -38,7 +37,7 @@ namespace Markets
         private SettlementTable settlementTable;
         private TradeTable tradeTable;
         private Matching_Type matchingType;
-        private MarketPlace_Matching_Type marketPlace_Matching_Type;
+
         //Constructor Market
         public Market()
         {
@@ -53,6 +52,7 @@ namespace Markets
             SellTable = sellTable;
             TradeTable = tradeTable;
             SettlementTable = settlementTable;
+            DirectPartialOrderMatchingEnable = directPartialOrderMatchingEnable;
         }
 
         // Constructor with parameters useful for update
@@ -86,7 +86,7 @@ namespace Markets
         public SettlementTable SettlementTable { get => settlementTable; set => settlementTable = value; }
         public TradeTable TradeTable { get => tradeTable; set => tradeTable = value; }
         public Matching_Type MatchingType { get => matchingType; set => matchingType = value; }
-        public MarketPlace_Matching_Type MarketPlace_Matching_Type { get => marketPlace_Matching_Type; set => marketPlace_Matching_Type = value; }
+        public bool DirectPartialOrderMatchingEnable{ get => directPartialOrderMatchingEnable; set => directPartialOrderMatchingEnable = value; }
 
         // Return a Product By Ticker
         public Product GetProduct(string Ticker)
@@ -95,13 +95,7 @@ namespace Markets
             return Product.GetProductByTicker(Ticker);
         }
 
-
-
-
-
-
-
-        // Send an Order
+                // Send an Order
 
         public void SendOrder()
         {
@@ -117,10 +111,12 @@ namespace Markets
             {
                 orderArray = line.Split(null);
 
+                 
+
                 //Checks if the Trade statement is right
                 if (matching.IsValidOrder(orderArray[0], orderArray))
                 {
-
+                   
                     switch (orderArray[0])
                     {
 
@@ -188,7 +184,15 @@ namespace Markets
                                 break;
 
                             }
-
+                        case "MATCH":
+                            {
+                                if(orderArray[1].Equals("EXISTING") && orderArray[2].Equals("ORDER"))
+                                { 
+                                bool authorizationUser = DirectPartialOrderMatchingEnable;
+                                matching.MatchingExistingOrder(orderArray , authorizationUser ,this.MatchingType);
+                                }
+                                break;
+                            }
 
                         default:
                             break;
@@ -202,7 +206,7 @@ namespace Markets
                 //Let's Trade
                 if (orderArray[0] == "PRINT" && matching.IsTrade())
                 {
-                    matching.SellTrade();
+                    matching.MatchOrder(this.MatchingType);
                 }
 
                 // Check for SELL AND BUY Tables for suitable trades.
@@ -213,10 +217,11 @@ namespace Markets
 
                 else if (matching.IsTrade())
                 {
-                    matching.SellTrade();
+                   
+                    matching.MatchOrder(this.MatchingType);
 
                 }
-                Console.ReadKey();
+               
             }
             catch
             { Console.ReadKey(); }

@@ -112,6 +112,7 @@ namespace Engine
                 //IOC operation
                 return Operation_type.CANCEL;
             }
+
             else return Operation_type.PRINT;
         }
 

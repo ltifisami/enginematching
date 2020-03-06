@@ -20,7 +20,7 @@ namespace Markets
         SettlementTable SettlementTable { get; set; }
         TradeTable TradeTable { get; set; }
         Matching_Type MatchingType { get; set; }
-        MarketPlace_Matching_Type MarketPlace_Matching_Type { get; set; }
+        bool DirectPartialOrderMatchingEnable { get; set; }
         Product GetProduct(string Ticker);
         string GetMatchingTypeByTicker();
         void SendOrder();
